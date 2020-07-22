@@ -2,11 +2,18 @@ package sa.entities;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Article {
+public class Article implements Serializable {
     @Id
     @GeneratedValue(generator="uuid") // @GeneratedValue(generator="uuid", strategy=GenerationType.SEQUENCE)
     @GenericGenerator(name="uuid", strategy="uuid2")
@@ -14,27 +21,30 @@ public class Article {
     private String language;
     @Column(name="RELEASE_DATE")
     private Date releaseDate;
-    @Column(name="SOURCE_ID")
-    private String sourceId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="source_id")
+    private Source source;
+
     @Column(name="CONTENT_ID")
     private String contentId;
-    @Column(name="NEWS_TAG")
-    private String newsTag;
+    private String topic;
     @Column(name="AUTHOR_ID")
     private String authorId;
     @Column(name="DATE_CREATED")
     private Date dateCreated;
 
-    protected Article(){}
 
-    public Article(String id, String language, Date releaseDate, String sourceId, String contentId, String newsTag, String authorId, Date dateCreated) {
+    Article(){}
+
+    public Article(String id, Date releaseDate, Source source, String contentId, String topic, String authorId, String language, Date dateCreated) {
         this.id = id;
-        this.language = language;
         this.releaseDate = releaseDate;
-        this.sourceId = sourceId;
+        this.source = source;
         this.contentId = contentId;
-        this.newsTag = newsTag;
+        this.topic = topic;
         this.authorId = authorId;
+        this.language = language;
         this.dateCreated = dateCreated;
     }
 
@@ -62,14 +72,6 @@ public class Article {
         this.releaseDate = releaseDate;
     }
 
-    public String getSourceId() {
-        return sourceId;
-    }
-
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
-    }
-
     public String getContentId() {
         return contentId;
     }
@@ -78,12 +80,12 @@ public class Article {
         this.contentId = contentId;
     }
 
-    public String getNewsTag() {
-        return newsTag;
+    public String getTopic() {
+        return topic;
     }
 
-    public void setNewsTag(String newsTag) {
-        this.newsTag = newsTag;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public String getAuthorId() {
@@ -100,5 +102,13 @@ public class Article {
 
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
     }
 }

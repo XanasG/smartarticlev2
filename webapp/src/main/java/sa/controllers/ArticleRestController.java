@@ -1,7 +1,7 @@
 package sa.controllers;
 
 import sa.entities.Article;
-import sa.repos.ArticleRepository;
+import sa.jpa.ArticleRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
